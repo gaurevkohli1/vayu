@@ -1,5 +1,7 @@
 # 02 — Clip 2: Macro Detail
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §3.
+
 **Use:** Fabric / Detail Proof section (`#fabric`, `data-asset="02-macro-detail"`), behind the five callouts (breathable feel, movement-first fit, premium stitching, soft stretch, elevated silhouette).
 **Format:** Video, 8–12s loop, 4K 16:9, 100mm macro look, 120 fps conformed to 24.
 

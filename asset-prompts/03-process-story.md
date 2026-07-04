@@ -1,5 +1,7 @@
 # 03 — Clip 3: Process Story
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §4.
+
 **Use:** Brand Philosophy section (`#philosophy`, `data-asset="03-process-story"`) — the Flow / Discipline / Modern movement beats.
 **Format:** Video, 10–15s, 4K 16:9, editorial montage of 3–4 shots, 24 fps with selective slow motion.
 

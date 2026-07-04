@@ -1,5 +1,8 @@
 # 00 — Master Hero Image
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §1 —
+> built on the official brand pack (real logo, final colors, locked casting).
+
 **Use:** Hero section background (`#hero`, `data-asset="00-master-hero-image"`).
 **Format:** Still image. 16:9 master at 6K+ (crop to 4:5 and 9:16 for social). Also export a 1200×630 OG crop.
 

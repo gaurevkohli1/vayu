@@ -1,5 +1,7 @@
 # 05 — Clip 5: Finale CTA
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §6.
+
 **Use:** Waitlist / Launch section background (`#waitlist`, `data-asset="05-finale-cta"`) — the collection reveal that sits behind/beside the waitlist form.
 **Format:** Video, 8–12s, 4K 16:9 with a clear left-third negative space (form/CTA overlays right on desktop). Also export a locked final frame as a still.
 

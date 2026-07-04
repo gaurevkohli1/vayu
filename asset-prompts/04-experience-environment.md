@@ -1,5 +1,7 @@
 # 04 — Clip 4: Experience Environment
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §5.
+
 **Use:** Lookbook / Gallery section (`#lookbook`, `data-asset="04-experience-environment"`) — also the source of the six lookbook stills (gym, street, studio, creator, track, recovery).
 **Format:** Video, 12–18s lifestyle montage, 4K 16:9 + 4:5 crops; pull 6+ editorial stills at 3:4.
 

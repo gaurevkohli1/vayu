@@ -1,5 +1,7 @@
 # 01 — Clip 1: Hero Orbit
 
+> **Final production version:** see `PRODUCTION-higgsfield-seedance.md` §2.
+
 **Use:** Hero section motion swap (`#hero`) — replaces/underlays the master still.
 **Format:** Video, 6–10s seamless loop, 4K 16:9 (plus 9:16 crop), 50–120 fps conformed to 24, no audio required.
 
