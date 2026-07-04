@@ -1,0 +1,24 @@
+{
+  "name": "vayu-site",
+  "private": true,
+  "version": "0.1.0",
+  "description": "VAYU — Built to Flow. Premium Indian-origin athleisure brand site.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.14"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
+    "playwright-core": "^1.61.1",
+    "vite": "^5.4.11"
+  }
+}
