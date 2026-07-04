@@ -130,6 +130,22 @@ button { font: inherit; }
 }
 .media-video.is-ready { opacity: 1; }
 .media-video[poster] { opacity: 1; } /* poster paints immediately */
+.pcard__img,
+.look__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+}
+.pcard__img.is-ready,
+.look__img.is-ready { opacity: 1; }
+.pcard:hover .pcard__img { transform: scale(1.06); }
+.look:hover .look__img { transform: scale(1.05); }
+.look__img { transition-duration: 1200ms; }
+
 .media-video--framed {
   position: relative;
   inset: auto;
@@ -757,6 +773,7 @@ button { font: inherit; }
   position: relative;
   will-change: transform;
 }
+.look__ph { position: relative; }
 .look:nth-child(3n + 2) { transform: translateY(clamp(1rem, 4vh, 3rem)); }
 .look__ph {
   aspect-ratio: 3 / 4;

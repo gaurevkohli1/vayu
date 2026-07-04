@@ -8,7 +8,7 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ASSETS } from './assets.js';
+import { ASSETS, resolveAsset } from './assets.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -365,10 +365,20 @@ function closeMobileMenu() {
 /* Campaign media (Higgsfield-generated stills + clips)       */
 /* ---------------------------------------------------------- */
 function initCampaignMedia() {
+  // Campaign stills (product cards, lookbook) — plain lazy images that
+  // fall back to the gradient study underneath if a file is missing.
+  document.querySelectorAll('img[data-media]').forEach((img) => {
+    const src = resolveAsset(img.dataset.media);
+    if (!src) return;
+    img.addEventListener('load', () => img.classList.add('is-ready'), { once: true });
+    img.addEventListener('error', () => img.remove(), { once: true });
+    img.src = src;
+  });
+
   const videos = document.querySelectorAll('video[data-media]');
 
   videos.forEach((video) => {
-    const src = ASSETS[video.dataset.media];
+    const src = resolveAsset(video.dataset.media);
     if (!src) return;
 
     const posterKey = video.dataset.poster;
