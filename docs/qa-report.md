@@ -1,5 +1,25 @@
 # VAYU Site — QA Report
 
+## Update 2026-07-04 (evening) — campaign media integration
+
+Generated campaign assets (Higgsfield: Nano Banana Pro 4K hero stills ×2,
+Seedance 2.0 1080p clips ×5) are wired into the site via `src/assets.js`
+(single manifest — swap URLs there to self-host). Hero orbit film + poster in
+the hero, macro film behind the fabric callouts, process film in Philosophy,
+lifestyle film above the lookbook grid, collection reveal behind the waitlist.
+Real brand logos (nav monogram, footer lockup, favicon) now ship from
+`public/brand/`.
+
+Re-ran lint (clean), build (clean, JS 54 kB gz), and headless-browser smoke
+test. The sandbox blocks the Higgsfield CDN, which exercised the designed
+failure path: every video removed itself, framed panels hid, gradient
+placeholders carried all sections, zero page errors, no layout overflow —
+so the site degrades cleanly if the CDN is ever unreachable. Videos play
+normally for real visitors. Reduced-motion users get the hero poster only,
+no autoplay. **Pre-launch:** download the seven CDN files into
+`public/assets/` and update `src/assets.js` (CDN URLs are not a long-term
+hosting guarantee).
+
 **Date:** 2026-07-04 · **Environment:** Node 22.22.2, Vite 5.4.21, headless Chromium (Playwright)
 
 ## Commands

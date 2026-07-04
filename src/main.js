@@ -8,6 +8,7 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ASSETS } from './assets.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -361,6 +362,64 @@ function closeMobileMenu() {
 }
 
 /* ---------------------------------------------------------- */
+/* Campaign media (Higgsfield-generated stills + clips)       */
+/* ---------------------------------------------------------- */
+function initCampaignMedia() {
+  const videos = document.querySelectorAll('video[data-media]');
+
+  videos.forEach((video) => {
+    const src = ASSETS[video.dataset.media];
+    if (!src) return;
+
+    const posterKey = video.dataset.poster;
+    if (posterKey && ASSETS[posterKey]) {
+      video.poster = ASSETS[posterKey].preview || ASSETS[posterKey];
+    }
+
+    // Reduced motion: show the poster frame only, never autoplay film.
+    if (prefersReducedMotion) {
+      if (!video.poster) {
+        const frame = video.closest('figure');
+        (frame || video).remove();
+      }
+      return;
+    }
+
+    video.src = src;
+    video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
+    // If the CDN is unreachable, drop the element so the gradient
+    // placeholder underneath carries the section (framed panels hide whole).
+    video.addEventListener(
+      'error',
+      () => {
+        const frame = video.closest('figure');
+        (frame || video).remove();
+        ScrollTrigger.refresh();
+      },
+      { once: true }
+    );
+  });
+
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (!video.src) return;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    },
+    { rootMargin: '100px 0px' }
+  );
+  videos.forEach((video) => observer.observe(video));
+}
+
+/* ---------------------------------------------------------- */
 /* Waitlist form                                              */
 /* ---------------------------------------------------------- */
 function initWaitlistForm() {
@@ -437,6 +496,7 @@ initCollectionScroll();
 initLookbookParallax();
 initAmbient();
 initMagnetic();
+initCampaignMedia();
 initWaitlistForm();
 
 // Recalculate pinned distances after fonts settle.
