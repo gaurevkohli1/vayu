@@ -89,8 +89,15 @@ button { font: inherit; }
   100% { transform: translate(2%, -1%); }
 }
 
-/* ---------- Preloader ---------- */
-.preloader {
+/* ---------- Preloader ----------
+   Progressive enhancement: the preloader and all "hidden until
+   animated" states only apply when JS is confirmed running
+   (html.js, set by an inline script). If the bundle fails to load
+   (stale cache after a redeploy, blocked script, ancient browser)
+   the full site still renders. A CSS failsafe also fades the
+   preloader out after 7s even if the JS intro never fires. */
+.preloader { display: none; }
+html.js .preloader {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -99,6 +106,10 @@ button { font: inherit; }
   place-content: center;
   gap: 0.75rem;
   text-align: center;
+  animation: preloader-failsafe 0.8s ease 7s forwards;
+}
+@keyframes preloader-failsafe {
+  to { opacity: 0; visibility: hidden; }
 }
 .preloader__mark {
   font-family: var(--font-display);
@@ -320,11 +331,24 @@ button { font: inherit; }
 .mobile-menu a:hover { color: var(--white); }
 .mobile-menu__cta { color: var(--accent) !important; }
 
-/* ---------- Shared reveal helpers ---------- */
+/* ---------- Shared reveal helpers ----------
+   Text starts hidden only under html.js — without JS the copy is
+   simply visible in place. (.sr-* nodes are created by JS.) */
 .reveal-line { overflow: hidden; }
-.reveal-line > span { display: inline-block; transform: translateY(110%); }
+.reveal-line > span { display: inline-block; }
+html.js .reveal-line > span {
+  transform: translateY(110%);
+  animation: reveal-failsafe 0.8s var(--ease-out) 7s forwards;
+}
 .split-reveal .sr-line { display: block; overflow: hidden; }
 .split-reveal .sr-inner { display: block; transform: translateY(110%); }
+
+/* If the bundle never runs its intro (failed load, crashed script),
+   everything animates to its final visible state anyway. End states
+   match the GSAP timelines, so a normal load looks identical. */
+@keyframes reveal-failsafe {
+  to { transform: none; opacity: 1; }
+}
 
 /* ============================================================
    1. HERO
@@ -404,7 +428,11 @@ button { font: inherit; }
   line-height: 0.98;
 }
 .hero__word { display: inline-block; overflow: hidden; }
-.hero__word > span { display: inline-block; transform: translateY(110%); }
+.hero__word > span { display: inline-block; }
+html.js .hero__word > span {
+  transform: translateY(110%);
+  animation: reveal-failsafe 0.8s var(--ease-out) 7s forwards;
+}
 .hero__word--accent > span {
   background: linear-gradient(100deg, var(--white) 10%, var(--accent) 60%, var(--silver) 95%);
   -webkit-background-clip: text;
@@ -424,8 +452,11 @@ button { font: inherit; }
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+}
+html.js .hero__ctas {
   opacity: 0;
   transform: translateY(20px);
+  animation: reveal-failsafe 0.8s var(--ease-out) 7s forwards;
 }
 .hero__scrollcue {
   position: absolute;
@@ -1051,9 +1082,9 @@ button { font: inherit; }
     transition-duration: 0.001s !important;
   }
   .grain { animation: none; }
-  .reveal-line > span,
-  .hero__word > span,
+  html.js .reveal-line > span,
+  html.js .hero__word > span,
   .split-reveal .sr-inner { transform: none; }
-  .hero__ctas { opacity: 1; transform: none; }
-  .preloader { display: none; }
+  html.js .hero__ctas { opacity: 1; transform: none; }
+  html.js .preloader { display: none; }
 }
