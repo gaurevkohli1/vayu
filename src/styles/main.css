@@ -272,13 +272,14 @@ html.js .preloader {
 .nav__logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.28em;
 }
-.nav__mark { width: 1.6rem; height: auto; display: block; }
+.nav__lockup {
+  height: clamp(26px, 3vw, 34px);
+  width: auto;
+  display: block;
+  transition: height 400ms var(--ease-out);
+}
+.nav.is-scrolled .nav__lockup { height: clamp(24px, 2.6vw, 30px); }
 .nav__links {
   display: flex;
   gap: 2.2rem;
