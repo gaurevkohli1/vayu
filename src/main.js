@@ -8,7 +8,7 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ASSETS, resolveAsset } from './assets.js';
+import { resolveAsset } from './assets.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -365,66 +365,52 @@ function closeMobileMenu() {
 /* Campaign media (Higgsfield-generated stills + clips)       */
 /* ---------------------------------------------------------- */
 function initCampaignMedia() {
-  // Campaign stills (product cards, lookbook) — plain lazy images that
-  // fall back to the gradient study underneath if a file is missing.
+  // Stills (product cards, lookbook) already carry their real `src` in the
+  // HTML and paint natively with zero JS — here we only add a soft fade-in
+  // and NEVER remove an element (a slow load must not delete the image).
   document.querySelectorAll('img[data-media]').forEach((img) => {
-    const src = resolveAsset(img.dataset.media);
-    if (!src) return;
-    img.addEventListener('load', () => img.classList.add('is-ready'), { once: true });
-    img.addEventListener('error', () => img.remove(), { once: true });
-    img.src = src;
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-ready');
+    } else {
+      img.addEventListener('load', () => img.classList.add('is-ready'), { once: true });
+    }
   });
 
   const videos = document.querySelectorAll('video[data-media]');
 
-  videos.forEach((video) => {
+  // Every video carries a real `poster` still in the HTML, so a frame shows
+  // with zero JS. Reduced motion keeps just that still.
+  if (prefersReducedMotion) return;
+
+  // Lazy-load the clip source only when it nears the viewport, then play
+  // while in view. On any failure we simply keep the poster still.
+  const loadVideo = (video) => {
+    if (video.dataset.loaded) return;
     const src = resolveAsset(video.dataset.media);
     if (!src) return;
-
-    const posterKey = video.dataset.poster;
-    if (posterKey && ASSETS[posterKey]) {
-      video.poster = ASSETS[posterKey].preview || ASSETS[posterKey];
-    }
-
-    // Reduced motion: show the poster frame only, never autoplay film.
-    if (prefersReducedMotion) {
-      if (!video.poster) {
-        const frame = video.closest('figure');
-        (frame || video).remove();
-      }
-      return;
-    }
-
-    video.src = src;
+    video.dataset.loaded = '1';
     video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
-    // If the CDN is unreachable, drop the element so the gradient
-    // placeholder underneath carries the section (framed panels hide whole).
-    video.addEventListener(
-      'error',
-      () => {
-        const frame = video.closest('figure');
-        (frame || video).remove();
-        ScrollTrigger.refresh();
-      },
-      { once: true }
-    );
-  });
+    video.src = src;
+  };
 
-  if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
+  if (!('IntersectionObserver' in window)) {
+    videos.forEach(loadVideo);
+    return;
+  }
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const video = entry.target;
-        if (!video.src) return;
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          loadVideo(video);
+          video.play?.().catch(() => {});
         } else {
-          video.pause();
+          video.pause?.();
         }
       });
     },
-    { rootMargin: '100px 0px' }
+    { rootMargin: '150px 0px' }
   );
   videos.forEach((video) => observer.observe(video));
 }
